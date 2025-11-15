@@ -18,7 +18,6 @@ interface CategorySectionProps {
 }
 
 export default function CategorySection({
-  categoryName,
   dishes,
 }: CategorySectionProps) {
   return (

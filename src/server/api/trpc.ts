@@ -5,8 +5,8 @@ import { db } from "~/server/db";
 
 interface CreateContextOptions {
   headers: Headers;
-  req?: any;
-  res?: any;
+  req?: Request | undefined;
+  res?: Response | undefined;
 }
 
 export const createTRPCContext = async (opts: CreateContextOptions) => {
@@ -14,14 +14,14 @@ export const createTRPCContext = async (opts: CreateContextOptions) => {
 
   try {
     if (opts.headers) {
-      const cookieHeader = opts.headers.get?.("cookie") ?? "";
+      const cookieHeader = opts.headers.get("cookie") ?? "";
       console.log("🔍 Cookie header:", cookieHeader);
 
-      const sessionMatch = cookieHeader.match(/sessionToken=([^;]+)/);
-      if (sessionMatch && sessionMatch[1]) {
-        userId = sessionMatch[1].split(":")[0] || null;
+      const match = /sessionToken=([^;]+)/.exec(cookieHeader);
+          userId = match?.[1]?.split(":")?.[0] ?? null;
+      if(userId)
         console.log("✅ Found userId from cookie:", userId);
-      } else {
+      else {
         console.log("❌ No sessionToken cookie found");
       }
     }

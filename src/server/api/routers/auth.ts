@@ -84,8 +84,8 @@ export const authRouter = createTRPCRouter({
         user = await ctx.db.user.create({
           data: {
             email: input.email,
-            name: input.name || "",
-            country: input.country || "",
+            name: input.name ?? "",
+            country: input.country ?? "",
             verified: true,
           },
         });
@@ -168,7 +168,7 @@ export const authRouter = createTRPCRouter({
   }),
 
   // Logout (clear session)
-  logout: publicProcedure.mutation(async ({ ctx }) => {
+  logout: publicProcedure.mutation(async () => {
     // ctx.res.setHeader("Set-Cookie", "sessionToken=; Path=/; Max-Age=0");
     return { success: true };
   }),

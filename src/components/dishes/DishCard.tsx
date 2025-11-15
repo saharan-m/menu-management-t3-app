@@ -1,63 +1,78 @@
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
-import DishDescription from './DishDescription';
-import DishActions from './DishActions';
+import React from "react";
+import { Card, CardTitle } from "~/components/ui/card";
+import DishDescription from "./DishDescription";
+import DishActions from "./DishActions";
+import  { Prisma } from "@prisma/client";
 
-type DishType = 'VEG' | 'NON_VEG' | 'EGG';
+type DishType = "VEG" | "NON_VEG" | "EGG";
+
+type DishWithCategoriesWithCategory = Prisma.DishGetPayload<{
+  include: { dishCategories: {
+    include: { category: true}
+  }
+  };
+}>;
+type DishCategoryWithCategory = Prisma.DishCategoryGetPayload<{
+  include: {category:true}
+}>
 
 interface DishCardProps {
-  dish: any;
+  dish: DishWithCategoriesWithCategory;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 const getDishTypeIcon = (type: DishType) => {
   switch (type) {
-    case 'VEG':
-      return '🟢';
-    case 'NON_VEG':
-      return '🔴';
-    case 'EGG':
-      return '🟡';
+    case "VEG":
+      return "🟢";
+    case "NON_VEG":
+      return "🔴";
+    case "EGG":
+      return "🟡";
     default:
-      return '';
+      return "";
   }
 };
 
 export default function DishCard({ dish, onEdit, onDelete }: DishCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow overflow-hidden">
-      <div className="flex gap-4 flex-col sm:flex-row">
+    <Card className="overflow-hidden transition-shadow hover:shadow-md">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {dish.imageUrl && (
           <img
             src={dish.imageUrl}
             alt={dish.name}
-            className="w-full sm:w-32 h-32 object-cover pl-2"
+            className="h-32 w-full object-cover pl-2 sm:w-32"
           />
         )}
         <div className="flex-1 p-4">
-          <div className="flex justify-between items-start mb-2 flex-col sm:flex-row">
+          <div className="mb-2 flex flex-col items-start justify-between sm:flex-row">
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <div className="mb-1 flex flex-wrap items-center gap-2">
                 <CardTitle className="text-lg">{dish.name}</CardTitle>
                 <span>{getDishTypeIcon(dish.dishType)}</span>
               </div>
-              <p className="text-slate-900 font-semibold mb-1">₹ {dish.price}</p>
+              <p className="mb-1 font-semibold text-slate-900">
+                ₹ {dish.price}
+              </p>
               <DishDescription description={dish.description} />
             </div>
             <DishActions onEdit={onEdit} onDelete={onDelete} />
           </div>
-          <div className="flex items-center justify-between text-sm flex-wrap gap-2">
-            {dish.dishCategories?.map((dc: any) => (
+          <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+            {dish.dishCategories?.map((dc: DishCategoryWithCategory) => (
               <span
                 key={dc.categoryId}
-                className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800"
               >
                 {dc.category.name}
               </span>
             ))}
             {dish.spiceLevel && dish.spiceLevel > 0 && (
-              <span className="text-red-500">{'🌶️'.repeat(dish.spiceLevel)}</span>
+              <span className="text-red-500">
+                {"🌶️".repeat(dish.spiceLevel)}
+              </span>
             )}
           </div>
         </div>

@@ -8,7 +8,6 @@ import CategoryTab from "~/components/categories/CategoryTab";
 import DishTab from "~/components/dishes/DishTab";
 import QRMenuShare from "~/components/restaurant/QRMenuShare";
 import Modal from "~/components/restaurant/Modal";
-
 type DishType = "VEG" | "NON_VEG" | "EGG";
 
 interface DishFormState {
@@ -65,7 +64,7 @@ export default function RestaurantDetailPage() {
     onSuccess: () => {
       setCategoryForm({ name: "" });
       setShowCategoryForm(false);
-      refetch();
+      void refetch();
     },
   });
 
@@ -73,13 +72,13 @@ export default function RestaurantDetailPage() {
     onSuccess: () => {
       setCategoryForm({ name: "" });
       setEditingCategory(null);
-      refetch();
+      void refetch();
     },
   });
 
   const deleteCategoryMutation = trpc.category.delete.useMutation({
     onSuccess: () => {
-      refetch();
+      void refetch();
     },
   });
 
@@ -96,7 +95,7 @@ export default function RestaurantDetailPage() {
       });
       setImagePreview(null);
       setShowDishForm(false);
-      refetch();
+      void refetch();
     },
   });
 
@@ -113,14 +112,14 @@ export default function RestaurantDetailPage() {
       });
       setImagePreview(null);
       setEditingDish(null);
-      refetch();
+      void refetch();
       setShowDishForm(false);
     },
   });
 
   const deleteDishMutation = trpc.dish.delete.useMutation({
     onSuccess: () => {
-      refetch();
+      void refetch();
     },
   });
 

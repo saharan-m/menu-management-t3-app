@@ -36,7 +36,7 @@ export default function CategoryTabs({
   }
 
   return (
-    <Tabs value={activeCategory || ''} onValueChange={setActiveCategory}>
+    <Tabs value={activeCategory ?? ''} onValueChange={setActiveCategory}>
       <TabsList className="w-full mb-8 grid gap-2" style={{ gridTemplateColumns: `repeat(auto-fit, minmax(100px, 1fr))` }}>
         {categories.map((category) => (
           <TabsTrigger

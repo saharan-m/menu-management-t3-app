@@ -1,7 +1,4 @@
 import React from "react";
-import { Button } from "~/components/ui/button";
-import { QRCodeCanvas as QRCode } from "qrcode.react";
-
 interface MenuHeaderProps {
   restaurantName: string;
   location: string;
@@ -11,7 +8,6 @@ interface MenuHeaderProps {
 export default function MenuHeader({
   restaurantName,
   location,
-  restaurantId,
 }: MenuHeaderProps) {
 
   return (

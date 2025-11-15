@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
-import { Tabs, TabsContent } from '~/components/ui/tabs';
+import { TabsContent } from '~/components/ui/tabs';
 import { Trash2, Edit2, Plus } from 'lucide-react';
 import AddEditCategoryForm from './CategoryForm';
 
@@ -10,7 +10,7 @@ interface CategoryFormState {
 }
 
 interface CategoryTabProps {
-  categories: any[];
+  categories: Category[];
   showForm: boolean;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
   categoryForm: CategoryFormState;
@@ -21,6 +21,11 @@ interface CategoryTabProps {
   handleDeleteCategory: (categoryId: string) => Promise<void>;
   isCreating: boolean;
   isUpdating: boolean;
+}
+interface Category {
+  id: string;
+  name: string;
+  displayOrder: number;
 }
 
 export default function CategoryTab({
@@ -36,7 +41,7 @@ export default function CategoryTab({
   isCreating,
   isUpdating,
 }: CategoryTabProps) {
-  const handleEditCategory = (category: any) => {
+  const handleEditCategory = (category: Category) => {
     setEditingCategory(category.id);
     setCategoryForm({ name: category.name });
     setShowForm(true);

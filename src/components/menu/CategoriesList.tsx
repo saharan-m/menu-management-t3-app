@@ -1,11 +1,20 @@
 import React from 'react';
 import CategorySection from './MenuCategorySection';
-
+import { DishType } from '@prisma/client';
+interface Dish {
+     price: number;
+        dishType: DishType;
+        name: string;
+        id: string;
+        description: string;
+        imageUrl: string | null;
+        spiceLevel: number | null;
+}
 interface Category {
   id: string;
   name: string;
   displayOrder: number;
-  dishes: any[];
+  dishes: Dish[];
 }
 
 interface CategoriesListProps {

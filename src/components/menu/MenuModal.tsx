@@ -38,10 +38,6 @@ export default function MenuModal({
     onSelectCategory(categoryId); // send to parent
     onClose(); // close modal
   };
-  const check = () => {
-    console.log("calling on close")
-    onClose();
-  }
 return (
   <>
     {/* Backdrop */}

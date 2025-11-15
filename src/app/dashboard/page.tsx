@@ -20,13 +20,18 @@ export default function DashboardPage() {
     onSuccess: () => {
       setFormData({ name: '', location: '' });
       setShowForm(false);
-      refetch(); // Refetch restaurants list
+      void refetch(); // Refetch restaurants list
     },
   });
 
   const handleCreateRestaurant = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createRestaurantMutation.mutateAsync(formData);
+    try {
+      await createRestaurantMutation.mutateAsync(formData);
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   if (isLoading) return <div>Loading...</div>;

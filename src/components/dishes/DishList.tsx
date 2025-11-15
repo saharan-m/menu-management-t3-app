@@ -1,10 +1,21 @@
 import React from 'react';
 import DishCard from './DishCard';
 import { Card, CardContent } from '~/components/ui/card';
+import type { Prisma } from '@prisma/client';
+
+type DishWithCategoriesWithCategory = Prisma.DishGetPayload<{
+  include: {
+    dishCategories: {
+      include: {
+        category: true
+      }
+    }
+  }
+}>
 
 interface DishListProps {
-  dishes: any[];
-  onEdit: (dish: any) => void;
+  dishes: DishWithCategoriesWithCategory[];
+  onEdit: (dish: DishWithCategoriesWithCategory) => void;
   onDelete: (id: string) => void;
 }
 

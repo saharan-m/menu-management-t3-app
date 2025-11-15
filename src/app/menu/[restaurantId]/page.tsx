@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { trpc } from "~/utils/trpc";
 import MenuHeader from "~/components/menu/MenuHeader";
@@ -8,31 +8,24 @@ import FloatingMenuButton from "~/components/menu/FloatingMenuButton";
 import MenuModal from "~/components/menu/MenuModal";
 import CategoriesList from "~/components/menu/CategoriesList";
 
-type DishType = "VEG" | "NON_VEG" | "EGG";
+// type DishType = "VEG" | "NON_VEG" | "EGG";
 
-interface Dish {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  spiceLevel: number | null;
-  imageUrl: string | null;
-  dishType: DishType;
-}
+// interface Dish {
+//   id: string;
+//   name: string;
+//   description: string;
+//   price: number;
+//   spiceLevel: number | null;
+//   imageUrl: string | null;
+//   dishType: DishType;
+// }
 
-interface Category {
-  id: string;
-  name: string;
-  displayOrder: number;
-  dishes: Dish[];
-}
-
-interface Menu {
-  id: string;
-  name: string;
-  location: string;
-  categories: Category[];
-}
+// interface Category {
+//   id: string;
+//   name: string;
+//   displayOrder: number;
+//   dishes: Dish[];
+// }
 
 export default function PublicMenuPage() {
   const params = useParams();
@@ -47,7 +40,6 @@ export default function PublicMenuPage() {
     isLoading,
     error,
   } = trpc.menu.getByRestaurantId.useQuery({ restaurantId });
-
 
   if (isLoading)
     return (
@@ -73,12 +65,11 @@ export default function PublicMenuPage() {
   }));
 
   const scrollToCategory = (categoryId: string) => {
-  const element = document.getElementById(`category-${categoryId}`);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-};
-
+    const element = document.getElementById(`category-${categoryId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,7 +83,6 @@ export default function PublicMenuPage() {
       {/* Main Content */}
       <div className="mx-auto max-w-4xl px-4 py-8">
         <CategoriesList categories={normalizedCategories} />
-
       </div>
 
       {/* Floating Menu Button */}
@@ -106,7 +96,7 @@ export default function PublicMenuPage() {
         isOpen={isMenuModalOpen}
         onClose={() => setIsMenuModalOpen(false)}
         categories={normalizedCategories}
-        onSelectCategory = {(id)=> scrollToCategory(id)}
+        onSelectCategory={(id) => scrollToCategory(id)}
       />
     </div>
   );

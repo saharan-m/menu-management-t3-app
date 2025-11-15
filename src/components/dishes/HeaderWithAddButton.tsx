@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from '~/components/ui/button';
 import { Plus } from 'lucide-react';
+import type { Category } from '@prisma/client';
 
 interface HeaderWithAddButtonProps {
-  categories: any[];
+  categories: Category[];
   showForm: boolean;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
   openNewDishForm: () => void;

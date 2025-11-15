@@ -10,8 +10,8 @@ export default function QRMenuShare({ restaurantId }: QRMenuShareProps) {
   const menuUrl = `${process.env.NEXT_PUBLIC_APP_URL}/menu/${restaurantId}`;
   const qrRef = useRef<HTMLCanvasElement>(null);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(menuUrl);
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(menuUrl);
     alert('Menu URL copied to clipboard!');
   };
 

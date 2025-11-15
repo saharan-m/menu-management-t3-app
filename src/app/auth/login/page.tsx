@@ -75,7 +75,7 @@ export default function LoginPage() {
 
   try {
     // Call updateUserProfile mutation which requires the user to be authenticated
-    const response = await updateUserProfileMutation.mutateAsync({
+     await updateUserProfileMutation.mutateAsync({
       name,
       country,
     });

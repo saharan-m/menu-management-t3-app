@@ -46,7 +46,6 @@ export default function LoginCard({
   loading,
   error,
   success,
-  setError,
   onSendOTP,
   onVerifyOTP,
   onVerifyDetails,

@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { Button } from '~/components/ui/button';
+import React from 'react';
 import { Card, CardContent } from '~/components/ui/card';
 import { TabsContent } from '~/components/ui/tabs';
-import { Plus } from 'lucide-react';
 import AddEditDishForm from './DishForm';
 import  DishList  from './DishList';
 import  HeaderWithAddButton  from './HeaderWithAddButton';
-
+import type { Category ,Prisma } from '@prisma/client';
 type DishType = 'VEG' | 'NON_VEG' | 'EGG';
+type DishWithCategoriesWithCategory = Prisma.DishGetPayload<{
+  include: {
+    dishCategories: {
+      include: {
+        category: true
+      }
+    }
+  }
+  }>
+type DishCategoryWithCategory = Prisma.DishCategoryGetPayload<{
+  include: {
+    category: true
+  }
+}>
 
 interface DishFormState {
   name: string;
@@ -20,8 +32,8 @@ interface DishFormState {
 }
 
 interface DishTabProps {
-  dishes: any[];
-  categories: any[];
+  dishes: DishWithCategoriesWithCategory[];
+  categories: Category[];
   showForm: boolean;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
   dishForm: DishFormState;
@@ -80,16 +92,16 @@ export default function DishTab({
     setImagePreview(null);
   };
 
-  const handleEditDish = (dish: any) => {
+  const handleEditDish = (dish: DishWithCategoriesWithCategory) => {
     setEditingDish(dish.id);
     setDishForm({
       name: dish.name,
       description: dish.description,
-      imageUrl: dish.imageUrl || '',
-      spiceLevel: dish.spiceLevel || 0,
-      price: dish.price || 0,
-      dishType: dish.dishType || 'VEG',
-      categoryIds: dish.dishCategories?.map((dc: any) => dc.categoryId) || [],
+      imageUrl: dish.imageUrl ?? '',
+      spiceLevel: dish.spiceLevel ?? 0,
+      price: dish.price ?? 0,
+      dishType: dish.dishType ?? 'VEG',
+      categoryIds: dish.dishCategories?.map((dc: DishCategoryWithCategory) => dc.categoryId) || [],
     });
     setImagePreview(dish.imageUrl);
     setShowForm(true);
