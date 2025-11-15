@@ -1,6 +1,6 @@
-// src/server/api/trpc.ts
+
 import { initTRPC, TRPCError } from "@trpc/server";
-import SuperJSON from "superjson";            // ← add this
+import SuperJSON from "superjson";   //???
 import { db } from "~/server/db";
 
 interface CreateContextOptions {
@@ -20,9 +20,9 @@ export const createTRPCContext = async (opts: CreateContextOptions) => {
       const match = /sessionToken=([^;]+)/.exec(cookieHeader);
           userId = match?.[1]?.split(":")?.[0] ?? null;
       if(userId)
-        console.log("✅ Found userId from cookie:", userId);
+        console.log("Found userId from cookie:", userId);
       else {
-        console.log("❌ No sessionToken cookie found");
+        console.log(" No sessionToken cookie found");
       }
     }
   } catch (error) {
