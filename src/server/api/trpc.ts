@@ -1,5 +1,6 @@
 // src/server/api/trpc.ts
 import { initTRPC, TRPCError } from "@trpc/server";
+import SuperJSON from "superjson";            // ← add this
 import { db } from "~/server/db";
 
 interface CreateContextOptions {
@@ -15,11 +16,9 @@ export const createTRPCContext = async (opts: CreateContextOptions) => {
     if (opts.headers) {
       const cookieHeader = opts.headers.get?.("cookie") ?? "";
       console.log("🔍 Cookie header:", cookieHeader);
-      
-      // Parse sessionToken from cookie
+
       const sessionMatch = cookieHeader.match(/sessionToken=([^;]+)/);
       if (sessionMatch && sessionMatch[1]) {
-        // Cookie format: "userId:timestamp"
         userId = sessionMatch[1].split(":")[0] || null;
         console.log("✅ Found userId from cookie:", userId);
       } else {
@@ -40,6 +39,7 @@ export const createTRPCContext = async (opts: CreateContextOptions) => {
 type Context = Awaited<ReturnType<typeof createTRPCContext>>;
 
 const t = initTRPC.context<Context>().create({
+  transformer: SuperJSON,               // ← REQUIRED for your client to use a transformer
   isServer: typeof window === "undefined",
   allowOutsideOfServer: true,
   isDev: process.env.NODE_ENV === "development",
@@ -50,7 +50,7 @@ export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   console.log("🔐 Protected - userId:", ctx.userId);
-  
+
   if (!ctx.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",

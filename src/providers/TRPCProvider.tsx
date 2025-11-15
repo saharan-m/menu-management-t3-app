@@ -1,5 +1,5 @@
 "use client";
-
+import SuperJSON from "superjson";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,13 +22,15 @@ export function TRPCProvider({ children }: { children: ReactNode }) {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`, // ✅ Use your app URL
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
+          transformer: SuperJSON, 
           fetch(url, options) {
             return fetch(url, {
               ...options,
               credentials: "include",
             });
-          }, // ✅ Send cookies automatically
+          },
+          // ✅ Send cookies automatically
         }),
       ],
     }),
