@@ -1,0 +1,112 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  country       String
+  verified      Boolean   @default(false)
+  
+  // Relations
+  restaurants   Restaurant[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// OTP verification codes
+model VerificationCode {
+  id        String    @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  
+  createdAt DateTime  @default(now())
+  
+  @@index([email, code])
+}
+
+// Restaurant model
+model Restaurant {
+  id         String    @id @default(cuid())
+  name       String
+  location   String
+  userId     String
+  
+  // Relations
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories Category[]
+  dishes     Dish[]
+  
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  @@index([userId])
+}
+
+// Category model (e.g., Starters, Main Course, Desserts)
+model Category {
+  id           String    @id @default(cuid())
+  name         String
+  displayOrder Int       @default(0)
+  restaurantId String
+  
+  // Relations
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  dishCategories DishCategory[]
+  
+  createdAt    DateTime  @default(now())
+  
+  @@index([restaurantId])
+}
+enum DishType {
+  VEG
+  NON_VEG
+  EGG
+}
+
+// Dish model
+model Dish {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  imageUrl      String?
+  spiceLevel    Int?     @default(0) // 0-5 scale
+  price         Int      // Price in smallest currency unit (e.g., paise for INR)
+  dishType      DishType @default(VEG)
+  restaurantId  String
+  
+  // Relations
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  dishCategories DishCategory[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([restaurantId])
+}
+
+// Many-to-many junction table for Dish and Category
+model DishCategory {
+  id         String   @id @default(cuid())
+  dishId     String
+  categoryId String
+  displayOrder Int    @default(0)
+  
+  // Relations
+  dish       Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([dishId, categoryId])
+  @@index([categoryId])
+}
