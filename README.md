@@ -19,7 +19,7 @@ I built this application using the T3 Stack (Next.js, tRPC, Prisma, React Query,
 4. **Auth Cookie**: Used cookie based auth for seemless experience
 
 ### Project Structure:
-
+```
 src/
 ├── app/ # Next.js App Router pages
 ├── components/ # Reusable UI components
@@ -30,7 +30,7 @@ src/
 │ │ └── trpc.ts # tRPC setup
 │ └── db.ts # Prisma client
 └── utils/ # Helper functions and tRPC client
-
+```
 ## IDE Used
 
 VSCode
