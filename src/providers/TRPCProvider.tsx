@@ -30,7 +30,6 @@ export function TRPCProvider({ children }: { children: ReactNode }) {
               credentials: "include",
             });
           },
-          // ✅ Send cookies automatically
         }),
       ],
     }),
